@@ -1,0 +1,26 @@
+# python缓存
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# pytest报告
+report/
+*.html
+allure-report/
+allure-results/
+
+# 虚拟环境
+venv/
+.venv/
+
+# pycharm配置
+.idea/
+*.iml
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 日志、临时文件
+*.log
