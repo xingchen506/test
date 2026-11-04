@@ -19,5 +19,3 @@ def read_excel():
     workbook.close()
 
     return data
-
-# url需要组装

@@ -1,8 +1,11 @@
+from utils.analyse_case import analyse_case
 import jsonpath
 import requests
 import pytest
 from utils.excel_utils import read_excel
 import pymysql
+from jinja2 import Template
+from utils.allure_utils import allure_init
 
 class TestRunner:
 
@@ -15,23 +18,16 @@ class TestRunner:
 
         #引入全局变量all
         all = self.all
-        method = case["method"]
-        url = "http://localhost:9527/admin/auth" + case["path"]
-        headers = eval(case["headers"]) if isinstance(case["headers"],str) else None
-        params = eval(case["params"]) if isinstance(case["params"], str) else None
-        data = eval(case["data"]) if isinstance(case["data"], str) else None
-        json = eval(case["json"]) if isinstance(case["json"], str) else None
-        files = eval(case["files"]) if isinstance(case["files"], str) else None
 
-        request_data = {
-            "method":method,
-            "url":url,
-            "headers":headers,
-            "params":params,
-            "data":data,
-            "json":json,
-            "files":files
-        }
+        #根据all的值渲染case
+        case = eval(Template(str(case)).render(all))
+
+        #初始化allure报告
+
+        allure_init(case)
+
+        request_data=analyse_case(case)
+
         res = requests.request(**request_data)
         #http响应断言
         if case["check"]:
@@ -81,4 +77,3 @@ class TestRunner:
                 conn.close()
                 value = result[0]
                 all[key] = value
-                print(all)
